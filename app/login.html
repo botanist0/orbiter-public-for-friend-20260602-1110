@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Orbiter Login</title>
+    <link rel="icon" type="image/png" href="./favicon.png">
+    <link rel="apple-touch-icon" href="./favicon.png">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="login-shell">
+      <section class="login-panel" aria-label="Orbiter login">
+        <p class="eyebrow">Orbiter</p>
+        <h1>Access</h1>
+        <p class="note-body">Enter your Orbiter access token for this device.</p>
+        <div class="login-sso">
+          <button id="googleLoginButton" class="google-login" type="button">Sign in with Google</button>
+          <p id="googleLoginStatus" class="note-body" aria-live="polite">Checking Google sign-in...</p>
+        </div>
+        <form id="loginForm" class="login-form">
+          <label>
+            Access token
+            <input id="accessToken" name="accessToken" type="password" autocomplete="current-password" required>
+          </label>
+          <button class="primary" type="submit">Unlock Orbiter</button>
+          <p id="loginStatus" class="note-body" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+    <script src="./login.js" type="module"></script>
+  </body>
+</html>

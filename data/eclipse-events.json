@@ -1,0 +1,58 @@
+{
+  "events": [
+    {
+      "id": "2024-04-08-total-solar-north-america",
+      "kind": "total-solar",
+      "icon": "total-solar-eclipse",
+      "label": "Total Solar Eclipse",
+      "start": "2024-04-08T16:40:00Z",
+      "end": "2024-04-08T20:15:00Z",
+      "source": "NASA/NSF 2024 North America total solar eclipse path",
+      "sourceUrl": "https://www.nsf.gov/events/solar-eclipse-2024",
+      "safetyNote": "Use certified solar eclipse glasses for any direct solar viewing.",
+      "totalityRadiusKm": 125,
+      "pathWaypoints": [
+        { "label": "Mazatlan", "latitude": 23.2494, "longitude": -106.4111 },
+        { "label": "Torreon", "latitude": 25.5428, "longitude": -103.4068 },
+        { "label": "Dallas", "latitude": 32.7767, "longitude": -96.7970 },
+        { "label": "Little Rock", "latitude": 34.7465, "longitude": -92.2896 },
+        { "label": "Indianapolis", "latitude": 39.7684, "longitude": -86.1581 },
+        { "label": "Cleveland", "latitude": 41.4993, "longitude": -81.6944 },
+        { "label": "Erie", "latitude": 42.1292, "longitude": -80.0851 },
+        { "label": "Buffalo", "latitude": 42.8864, "longitude": -78.8784 },
+        { "label": "Burlington", "latitude": 44.4759, "longitude": -73.2121 },
+        { "label": "Houlton", "latitude": 46.1262, "longitude": -67.8403 }
+      ]
+    },
+    {
+      "id": "2025-03-14-total-lunar-americas",
+      "kind": "total-lunar",
+      "icon": "blood-moon",
+      "label": "Blood Moon",
+      "start": "2025-03-14T03:57:00Z",
+      "end": "2025-03-14T10:00:00Z",
+      "source": "NASA March 2025 total lunar eclipse overview",
+      "sourceUrl": "https://science.nasa.gov/solar-system/moon/what-you-need-to-know-about-the-march-2025-total-lunar-eclipse/",
+      "safetyNote": "Lunar eclipses are safe to view without eye protection.",
+      "visibility": "global-night"
+    },
+    {
+      "id": "2026-08-12-total-solar-greenland-iceland-spain",
+      "kind": "total-solar",
+      "icon": "total-solar-eclipse",
+      "label": "Total Solar Eclipse",
+      "start": "2026-08-12T16:00:00Z",
+      "end": "2026-08-12T19:30:00Z",
+      "source": "NASA SVS 2026 total solar eclipse path",
+      "sourceUrl": "https://svs.gsfc.nasa.gov/5647",
+      "safetyNote": "Use certified solar eclipse glasses for any direct solar viewing.",
+      "totalityRadiusKm": 130,
+      "pathWaypoints": [
+        { "label": "Eastern Greenland", "latitude": 70.2000, "longitude": -28.0000 },
+        { "label": "Western Iceland", "latitude": 64.1400, "longitude": -21.9400 },
+        { "label": "Northern Spain", "latitude": 42.8160, "longitude": -1.6440 },
+        { "label": "Northeast Portugal", "latitude": 41.8060, "longitude": -6.7570 }
+      ]
+    }
+  ]
+}

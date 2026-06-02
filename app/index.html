@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Orbiter</title>
+    <link rel="icon" type="image/png" href="./favicon.png">
+    <link rel="apple-touch-icon" href="./favicon.png">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="workspace" aria-label="Orbiter workspace">
+        <header class="topbar">
+          <div>
+            <h1 class="orbiter-title">ORBITER <span class="orbiter-launch-icon" role="img" aria-label="Rocket">🚀</span></h1>
+            <p class="topbar-subtitle">Mission Control</p>
+          </div>
+          <div class="topbar-side">
+            <div class="status-row" aria-label="Workspace stats">
+              <span><strong id="noteCount">0</strong> notes</span>
+              <span><strong id="indexCount">0</strong> backend</span>
+              <span><strong id="mobileCount">0</strong> mobile</span>
+              <span><strong id="emailCount">0</strong> email</span>
+              <span><strong id="travelCount">0</strong> travel</span>
+              <span><strong id="commandCount">0</strong> commands</span>
+              <span><strong id="graphCount">0</strong> graph</span>
+              <span><strong id="accessMode">local</strong> access</span>
+            </div>
+            <section class="time-card" aria-label="Local backend time">
+              <p class="time-label">Local Time</p>
+              <div class="time-main">
+                <time id="localTime" datetime="">--:--</time>
+                <span id="timePhaseIcon" class="time-phase-icon phase-day" role="img" aria-label="Daytime"></span>
+              </div>
+              <div class="time-details">
+                <span id="localDate">Loading date</span>
+                <span id="localZone">Timezone</span>
+              </div>
+              <div class="environment-widget" aria-label="Local weather and sky event">
+                <span id="environmentIcon" class="environment-icon icon-unknown" aria-hidden="true"></span>
+                <div class="environment-copy">
+                  <p id="environmentPrimary">Weather pending</p>
+                  <p id="environmentSecondary">Checking local sky status</p>
+                </div>
+              </div>
+              <p id="timeUpdated" class="time-updated">Syncing</p>
+            </section>
+          </div>
+        </header>
+
+        <nav class="tabs" aria-label="Primary views">
+          <button class="tab is-active" data-view="capture">Capture</button>
+          <button class="tab" data-view="review">Review</button>
+          <button class="tab" data-view="mobile">Mobile</button>
+          <button class="tab" data-view="email">Email</button>
+          <button class="tab" data-view="travel">Travel</button>
+          <button class="tab" data-view="commands">Commands</button>
+          <button class="tab" data-view="commandCenter" data-feature="commandCenter" hidden>Command Center</button>
+          <button class="tab" data-view="access">Access</button>
+          <button class="tab" data-view="graph">Graph</button>
+          <button class="tab" data-view="search">Search</button>
+        </nav>
+
+        <section class="view is-active" id="captureView">
+          <form id="captureForm" class="capture-form">
+            <label>
+              Title
+              <input id="titleInput" name="title" autocomplete="off" placeholder="What should this be called?" required>
+            </label>
+            <label>
+              Notes
+              <textarea id="bodyInput" name="body" rows="9" placeholder="Capture the thought, link, quote, decision, reminder, or Codex prompt."></textarea>
+            </label>
+            <div class="form-grid">
+              <label>
+                Type
+                <select id="typeInput" name="type">
+                  <option value="note">Note</option>
+                  <option value="idea">Idea</option>
+                  <option value="task">Task</option>
+                  <option value="person">Person</option>
+                  <option value="source">Source</option>
+                  <option value="command">Command</option>
+                </select>
+              </label>
+              <label>
+                Tags
+                <input id="tagsInput" name="tags" placeholder="comma, separated, tags">
+              </label>
+            </div>
+            <div class="compose-actions">
+              <button id="captureSubmit" class="primary" type="submit">Capture note</button>
+              <p id="captureStatus" class="note-body" aria-live="polite"></p>
+            </div>
+          </form>
+
+          <div class="import-panel">
+            <div>
+              <h2>Import markdown</h2>
+              <p>Select `.md` files to add them to this browser's local workspace.</p>
+            </div>
+            <label class="file-picker">
+              Choose files
+              <input id="markdownImport" type="file" accept=".md,text/markdown,text/plain" multiple>
+            </label>
+            <p id="importStatus" class="note-body" aria-live="polite"></p>
+          </div>
+        </section>
+
+        <section class="view" id="reviewView">
+          <div class="inbox-dashboard">
+            <div>
+              <p class="eyebrow">Review Inbox</p>
+              <h2>Focused Review</h2>
+              <p class="note-body">Notes, tasks, travel mail, and command handoffs are separated into lanes so the inbox stays actionable.</p>
+            </div>
+            <button id="clearReviewed" class="secondary" type="button">Refresh</button>
+          </div>
+          <div id="inboxStats" class="inbox-stats" aria-label="Inbox summary"></div>
+          <div id="inboxFilters" class="inbox-filters" role="tablist" aria-label="Inbox lanes">
+            <button class="inbox-filter is-active" type="button" data-inbox-filter="focused"><span>Focus</span><strong>0</strong></button>
+            <button class="inbox-filter" type="button" data-inbox-filter="tasks"><span>Tasks</span><strong>0</strong></button>
+            <button class="inbox-filter" type="button" data-inbox-filter="mobile"><span>Mobile</span><strong>0</strong></button>
+            <button class="inbox-filter" type="button" data-inbox-filter="email"><span>Email</span><strong>0</strong></button>
+            <button class="inbox-filter" type="button" data-inbox-filter="travel"><span>Travel Email</span><strong>0</strong></button>
+            <button class="inbox-filter" type="button" data-inbox-filter="commands"><span>Commands</span><strong>0</strong></button>
+            <button class="inbox-filter" type="button" data-inbox-filter="all"><span>All</span><strong>0</strong></button>
+          </div>
+          <div class="inbox-list-heading">
+            <div>
+              <h3 id="inboxListTitle">Focused Inbox</h3>
+              <p id="inboxListHint" class="note-body">Human notes, tasks, and mobile captures only. Imported email stays in Email and Travel Email.</p>
+            </div>
+          </div>
+          <div id="noteList" class="note-list inbox-note-list" aria-live="polite"></div>
+        </section>
+
+        <section class="view" id="mobileView">
+          <div class="review-header">
+            <div>
+              <h2>Mobile Captures</h2>
+              <p class="note-body">Back Tap and Shortcut captures waiting to be processed.</p>
+            </div>
+            <button id="refreshMobile" class="secondary" type="button">Refresh</button>
+          </div>
+          <div id="mobileList" class="note-list" aria-live="polite"></div>
+        </section>
+
+        <section class="view" id="emailView">
+          <div class="review-header">
+            <div>
+              <h2>Email</h2>
+              <p class="note-body">Important Gmail, local outbound drafts, and triage metadata.</p>
+            </div>
+            <button id="refreshEmail" class="secondary" type="button">Refresh</button>
+          </div>
+          <section class="email-intelligence-panel" aria-label="Email intelligence">
+            <div>
+              <p class="eyebrow">Premium Email Triage</p>
+              <h3>Important-first inbox</h3>
+              <p class="note-body">Orbiter scores imported Gmail with deterministic importance signals, reasons, and tags. Run the important ingest command to prioritize mail you actually act on.</p>
+            </div>
+            <code>npm run email:ingest:important</code>
+          </section>
+          <form id="emailDraftForm" class="email-compose">
+            <div class="form-grid">
+              <label>
+                From
+                <input value="Configured primary sender" readonly>
+              </label>
+              <label>
+                To
+                <input id="emailTo" autocomplete="email" placeholder="recipient@example.com" required>
+              </label>
+            </div>
+            <label>
+              Subject
+              <input id="emailSubject" autocomplete="off" placeholder="What is this email about?" required>
+            </label>
+            <label>
+              Body
+              <textarea id="emailBody" rows="6" placeholder="Write the email body. Orbiter will save a draft only." required></textarea>
+            </label>
+            <div class="compose-actions">
+              <button class="primary" type="submit">Create draft</button>
+              <p id="emailStatus" class="note-body" aria-live="polite"></p>
+            </div>
+          </form>
+          <div id="emailList" class="note-list" aria-live="polite"></div>
+        </section>
+
+        <section class="view" id="travelView">
+          <div class="travel-overview">
+            <div>
+              <p class="eyebrow">Generated Itinerary</p>
+              <h2>Travel Itinerary</h2>
+              <p class="note-body">Flights, lodging, tickets, and review items generated from the travel Gmail account.</p>
+              <p class="travel-sync">
+                <span id="travelGenerated">Generated time unknown</span>
+                <span id="travelSource">Source pending</span>
+              </p>
+            </div>
+            <div class="travel-actions">
+              <button id="connectGoogleTravel" class="secondary" type="button">Connect Google</button>
+              <button id="importGoogleTravel" class="primary" type="button">Import 100 travel emails</button>
+              <button id="refreshTravel" class="secondary" type="button">Refresh</button>
+              <p id="googleTravelStatus" class="note-body" aria-live="polite"></p>
+            </div>
+          </div>
+          <div id="travelStats" class="travel-stat-grid" aria-label="Itinerary summary"></div>
+          <section class="travel-route-card" aria-label="Trip route">
+            <div class="travel-panel-header">
+              <h3>Route</h3>
+              <p class="note-body">City sequence inferred from dated travel records.</p>
+            </div>
+            <div id="travelRoute" class="travel-route"></div>
+          </section>
+          <section id="travelShortPanel" class="travel-short-card" aria-label="Itinerary video short">
+            <div class="travel-short-copy">
+              <p class="eyebrow">Route Short</p>
+              <h3 id="travelShortTitle">Travel reel</h3>
+              <p id="travelShortMeta" class="note-body">Waiting for itinerary context.</p>
+              <a id="travelShortLink" class="inline-action" href="https://www.youtube.com/" target="_blank" rel="noopener">Open on YouTube</a>
+            </div>
+            <div id="travelShortPlayer" class="travel-short-player" aria-live="polite">
+              <div class="travel-short-placeholder">
+                <span>YT</span>
+              </div>
+            </div>
+          </section>
+          <section class="travel-route-card" aria-label="Planning gaps">
+            <div class="travel-panel-header">
+              <div>
+                <h3>Planning Gaps</h3>
+                <p class="note-body">Hotel nights and city transfers Orbiter cannot confirm from imported email.</p>
+              </div>
+              <p id="travelGapStatus" class="note-body" aria-live="polite"></p>
+            </div>
+            <div id="travelGaps" class="travel-gap-list"></div>
+          </section>
+          <div class="travel-dashboard-grid">
+            <section class="travel-panel travel-panel--stays" aria-label="Lodging stays">
+              <div class="travel-panel-header">
+                <h3>Stays</h3>
+                <p class="note-body">Hotel nights by date span.</p>
+              </div>
+              <div id="lodgingBars" class="lodging-bars"></div>
+            </section>
+            <section class="travel-panel travel-panel--transportation" aria-label="Transportation tickets">
+              <div class="travel-panel-header">
+                <h3>Transportation</h3>
+                <p class="note-body">Flights, trains, rail passes, and transfer tickets.</p>
+              </div>
+              <div id="transportationList" class="transportation-list"></div>
+            </section>
+            <section class="travel-panel travel-panel--review" aria-label="Needs review">
+              <div class="travel-panel-header">
+                <h3>Needs Review</h3>
+                <p class="note-body">Unknown dates and weak parses.</p>
+              </div>
+              <div id="travelReview" class="travel-review-list"></div>
+            </section>
+          </div>
+          <section class="travel-timeline-panel" aria-label="Day timeline">
+            <div class="travel-panel-header">
+              <h3>Day Timeline</h3>
+              <p class="note-body">Chronological operating view for the trip.</p>
+            </div>
+            <div id="travelTimeline" class="travel-timeline" aria-live="polite"></div>
+          </section>
+        </section>
+
+        <section class="view" id="commandsView">
+          <div class="review-header">
+            <div>
+              <h2>Commands</h2>
+              <p class="note-body">Mobile and remote commands. Approve a command for Codex, then let the Codex runner claim it. Browser previews do not mark commands running.</p>
+            </div>
+            <button id="refreshCommands" class="secondary" type="button">Refresh</button>
+          </div>
+          <form id="commandForm" class="command-compose">
+            <p class="note-body">Create new commands from the Capture tab by choosing Type: Command. This tab is now only for review, approval, and Codex handoff.</p>
+          </form>
+          <div id="commandSummary" class="command-summary" aria-live="polite"></div>
+          <div class="command-toolbar">
+            <button id="codexNext" class="primary" type="button">Preview next handoff</button>
+            <button id="copyCodexHandoff" class="secondary" type="button" hidden>Copy handoff</button>
+          </div>
+          <p id="commandStatus" class="command-status" aria-live="polite"></p>
+          <section id="codexHandoffPanel" class="codex-handoff" hidden>
+            <label>
+              Codex handoff
+              <textarea id="codexHandoffOutput" rows="10" readonly></textarea>
+            </label>
+          </section>
+          <section class="codex-history-panel" aria-label="Codex thread history">
+            <div class="codex-history-header">
+              <div>
+                <p class="eyebrow">Live Codex Activity</p>
+                <h3>Thread History</h3>
+                <p id="codexHistoryMeta" class="note-body">Waiting for activity sync.</p>
+              </div>
+              <button id="refreshCodexHistory" class="secondary" type="button">Refresh history</button>
+            </div>
+            <div id="codexHistoryList" class="codex-history-list" aria-live="polite"></div>
+          </section>
+          <div id="commandList" class="note-list" aria-live="polite"></div>
+        </section>
+
+        <section class="view" id="commandCenterView" data-feature="commandCenter" hidden>
+          <div class="command-center-hero">
+            <div>
+              <p class="eyebrow">Dev Command Center</p>
+              <h2>Mission Readiness</h2>
+              <p class="note-body">A hidden operating dashboard for queue health, travel readiness, email drafts, runtime status, and next actions.</p>
+              <p id="commandCenterSync" class="note-body">Waiting for dev feature sync.</p>
+            </div>
+            <button id="refreshCommandCenter" class="primary" type="button">Refresh command center</button>
+          </div>
+          <div id="commandCenterHero" class="command-center-status-grid" aria-live="polite"></div>
+          <div id="commandCenterMetrics" class="command-center-metric-grid"></div>
+          <div class="command-center-layout">
+            <section class="command-center-card">
+              <div class="travel-panel-header">
+                <h3>Queue Health</h3>
+                <p class="note-body">Codex readiness and stale handoffs.</p>
+              </div>
+              <div id="commandCenterQueue" class="command-center-list"></div>
+            </section>
+            <section class="command-center-card">
+              <div class="travel-panel-header">
+                <h3>Recommendations</h3>
+                <p class="note-body">What Orbit thinks you should look at next.</p>
+              </div>
+              <div id="commandCenterRecommendations" class="command-center-list"></div>
+            </section>
+            <section class="command-center-card">
+              <div class="travel-panel-header">
+                <h3>Recent Activity</h3>
+                <p class="note-body">Latest inferred Codex lifecycle events.</p>
+              </div>
+              <div id="commandCenterActivity" class="command-center-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="accessView">
+          <div class="access-layout">
+            <section class="access-panel">
+              <p class="eyebrow">Session</p>
+              <h2 id="accessUser">Local user</h2>
+              <dl>
+                <dt>Authentication</dt>
+                <dd id="accessAuth">Unknown</dd>
+                <dt>Network guard</dt>
+                <dd id="accessGuard">Unknown</dd>
+                <dt>Remote address</dt>
+                <dd id="accessRemote">Unknown</dd>
+                <dt>Data mode</dt>
+                <dd id="accessDataScope">Unknown</dd>
+              </dl>
+              <button id="logoutButton" class="secondary" type="button">Log out</button>
+            </section>
+            <section class="access-panel">
+              <p class="eyebrow">Local Production</p>
+              <h2>Remote-ready mode</h2>
+              <p class="note-body">Production mode uses Tailscale-only network access plus per-user tokens. Phone capture can use `x-orbiter-access-token` for user-owned notes and commands.</p>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="graphView">
+          <div class="graph-header">
+            <div>
+              <h2>Knowledge Graph</h2>
+              <p class="note-body">Notes, domains, tags, and explicit links across Orbiter.</p>
+            </div>
+            <div class="graph-controls">
+              <label>
+                Focus
+                <select id="graphMode">
+                  <option value="all">All</option>
+                  <option value="notes">Notes</option>
+                  <option value="domains">Domains</option>
+                  <option value="tags">Tags</option>
+                </select>
+              </label>
+              <button id="resetGraphLayout" class="secondary" type="button">Reset layout</button>
+              <button id="refreshGraph" class="secondary" type="button">Refresh</button>
+            </div>
+          </div>
+          <div class="graph-layout">
+            <canvas id="knowledgeGraph" width="980" height="560" aria-label="Knowledge graph"></canvas>
+            <aside class="graph-detail" id="graphDetail">
+              <p class="eyebrow">Selection</p>
+              <h3>Choose a node</h3>
+              <p class="note-body">Click a circle to see its note path, tag, or domain.</p>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="searchView">
+          <label class="search-box">
+            Search notes
+            <input id="searchInput" autocomplete="off" placeholder="Search titles, tags, and note text">
+          </label>
+          <p class="note-body index-hint">Search reads usernotes, inbox, journal, issues, and knowledge.</p>
+          <div id="searchResults" class="note-list"></div>
+        </section>
+
+      </section>
+    </main>
+
+    <template id="noteTemplate">
+      <article class="note-card">
+        <div>
+          <p class="note-meta"></p>
+          <h3></h3>
+          <p class="note-body"></p>
+          <div class="relation-list"></div>
+        </div>
+        <div class="note-actions">
+          <button class="secondary export-button" type="button">Export</button>
+          <button class="danger delete-button" type="button">Delete</button>
+        </div>
+      </article>
+    </template>
+
+    <template id="commandTemplate">
+      <article class="note-card command-card">
+        <div>
+          <div class="command-card-head">
+            <p class="note-meta"></p>
+            <span class="status-pill"></span>
+          </div>
+          <h3></h3>
+          <p class="note-body"></p>
+          <p class="command-detail"></p>
+        </div>
+        <div class="note-actions">
+          <button class="secondary reviewed-button" type="button">Approve for Codex</button>
+          <button class="secondary done-button" type="button">Mark Done</button>
+          <button class="danger reject-button" type="button">Reject</button>
+          <button class="danger delete-button" type="button">Delete</button>
+        </div>
+      </article>
+    </template>
+
+    <template id="travelTemplate">
+      <article class="travel-card">
+        <div class="travel-marker">
+          <span class="travel-type-token"></span>
+        </div>
+        <div class="travel-card-body">
+          <div class="travel-card-head">
+            <p class="note-meta"></p>
+            <span class="travel-time"></span>
+          </div>
+          <h3></h3>
+          <p class="travel-location"></p>
+          <ul class="travel-details"></ul>
+          <p class="note-body travel-source"></p>
+        </div>
+      </article>
+    </template>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>
